@@ -1,10 +1,10 @@
-# CDN Runbook Assistant 🚀
+# CDN Runbook Assistant 
 
 A RAG-powered chatbot that answers questions about AWS CloudFront
 grounded in real AWS documentation. Built using Python, 
 Anthropic Claude API, and ChromaDB.
 
-## 🎯 Project Overview
+## Project Overview
 
 This project demonstrates a production-ready RAG 
 (Retrieval-Augmented Generation) pipeline that:
@@ -13,12 +13,12 @@ This project demonstrates a production-ready RAG
 - Retrieves relevant context based on user queries
 - Generates accurate, grounded answers using Claude API
 
-## 🏗️ Architecture
+## Architecture
 
 User Query → Embed Query → ChromaDB Search → Retrieve Top 5 Chunks
 → Augmented Prompt → Claude API → Grounded Answer
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component | Tool |
 |---|---|
@@ -29,7 +29,7 @@ User Query → Embed Query → ChromaDB Search → Retrieve Top 5 Chunks
 | PDF Processing | pypdf |
 | Environment | python-dotenv |
 
-## 📁 Project Structure
+## Project Structure
 
 cdn-runbook-assistant/
 ├── ingest.py        # Phase 2: Chunk, embed and store docs
@@ -38,7 +38,7 @@ cdn-runbook-assistant/
 ├── docs/            # AWS CloudFront documentation PDF
 └── README.md
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3
@@ -80,14 +80,14 @@ python3 ingest.py
 python3 chatbot.py
 ```
 
-## 💡 Example Queries
+## Example Queries
 
 - "What is the default TTL for static objects in CloudFront?"
 - "How do I invalidate cache in CloudFront?"
 - "What are CloudFront origins?"
 - "How do I set up an origin group for high availability?"
 
-## 🧠 Key Concepts Demonstrated
+## Key Concepts Demonstrated
 
 - **RAG Architecture** — Retrieval-Augmented Generation pipeline
 - **Vector Embeddings** — Semantic search using sentence-transformers
@@ -95,7 +95,7 @@ python3 chatbot.py
 - **Claude API Integration** — Anthropic SDK for LLM inference
 - **Vector Database** — ChromaDB for efficient similarity search
 
-## 👤 Author
+## Author
 
 Pravanjana — Solutions Architect | CDN Specialist
 AWS SAA-C03 | Azure AZ-104
