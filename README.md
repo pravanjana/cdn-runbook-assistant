@@ -97,5 +97,5 @@ python3 chatbot.py
 
 ## Author
 
-Pravanjana — Solutions Architect | CDN Specialist
+Pravanjana - Solutions Architect | CDN Specialist
 AWS SAA-C03 | Azure AZ-104
