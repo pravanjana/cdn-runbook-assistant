@@ -48,8 +48,16 @@ def embed_and_store(chunks):
 
 # Main execution
 if __name__ == "__main__":
-    pdf_path = "docs/AmazonCloudFront_DevGuide.pdf"
-    text = read_pdf(pdf_path)
-    chunks = chunk_text(text)
-    embed_and_store(chunks)
+    pdf_files = [
+    "docs/AmazonCloudFront_DevGuide.pdf",
+    "docs/waf-dg.pdf",
+    "docs/AWS-s3-userguide.pdf"
+    ]
+    
+    for pdf_path in pdf_files:
+        print(f"\nProcessing: {pdf_path}")
+        text = read_pdf(pdf_path)
+        chunks = chunk_text(text)
+        embed_and_store(chunks)
+
     print("Ingestion complete! Knowledge base is ready.")
