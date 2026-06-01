@@ -18,15 +18,15 @@ if collection.count() < 13000:
     st.info("🔄 Building knowledge base. This may take 20-30 minutes...")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
-        "docs/AmazonCloudFront_DevGuide.pdf",
-        "docs/waf-dg.pdf",
-        "docs/AWS-s3-userguide.pdf"
+        ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
+        ("docs/waf-dg.pdf", "waf"),
+        ("docs/AWS-s3-userguide.pdf", "s3")
     ]
-    for pdf_path in pdf_files:
+    for pdf_path, prefix in pdf_files:
         st.info(f"📄 Processing {pdf_path}...")
         text = read_pdf(pdf_path)
         chunks = chunk_text(text)
-        embed_and_store(chunks)
+        embed_and_store(chunks, prefix)
     st.success("✅ Knowledge base ready!")
     st.rerun()
 
