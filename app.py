@@ -12,11 +12,10 @@ def get_collection():
 
 collection = get_collection()
 
-# Debug line - shows chunk count
 st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
 
-if collection.count() == 0:
-    st.info("🔄 First time setup — building knowledge base. This may take a few minutes...")
+if collection.count() < 13000:
+    st.info("🔄 Building knowledge base. This may take 20-30 minutes...")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
         "docs/AmazonCloudFront_DevGuide.pdf",
@@ -24,6 +23,7 @@ if collection.count() == 0:
         "docs/AWS-s3-userguide.pdf"
     ]
     for pdf_path in pdf_files:
+        st.info(f"📄 Processing {pdf_path}...")
         text = read_pdf(pdf_path)
         chunks = chunk_text(text)
         embed_and_store(chunks)
