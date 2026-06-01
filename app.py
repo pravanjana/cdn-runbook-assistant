@@ -12,6 +12,9 @@ def get_collection():
 
 collection = get_collection()
 
+# Debug line - shows chunk count
+st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
+
 if collection.count() == 0:
     st.info("🔄 First time setup — building knowledge base. This may take a few minutes...")
     from ingest import read_pdf, chunk_text, embed_and_store
