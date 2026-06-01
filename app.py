@@ -1,4 +1,20 @@
+import os
 import streamlit as st
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Auto-ingest if chroma_db doesn't exist
+if not os.path.exists("chroma_db"):
+    st.info("🔄 First time setup — building knowledge base from CloudFront docs. This may take a few minutes...")
+    from ingest import read_pdf, chunk_text, embed_and_store
+    text = read_pdf("docs/AmazonCloudFront_DevGuide.pdf")
+    chunks = chunk_text(text)
+    embed_and_store(chunks)
+    st.success("✅ Knowledge base ready!")
+    st.rerun()
+
 from rag import ask
 
 # Page configuration
