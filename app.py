@@ -14,8 +14,15 @@ collection = get_collection()
 
 st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
 
-if collection.count() < 13000:
-    st.info("🔄 Building knowledge base. This may take 20-30 minutes...")
+# Check if using new unique prefix IDs
+existing = collection.get(limit=1)
+needs_rebuild = len(existing['ids']) == 0 or not existing['ids'][0].startswith(('cloudfront_', 'waf_', 's3_'))
+
+if needs_rebuild:
+    st.info("🔄 Rebuilding knowledge base with improved indexing...")
+    client = chromadb.PersistentClient(path="./chroma_db")
+    client.delete_collection(name="cloudfront_docs")
+    collection = client.get_or_create_collection(name="cloudfront_docs")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
         ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
