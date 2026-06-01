@@ -1,10 +1,18 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
+import chromadb
 
 load_dotenv()
 
-if not os.path.exists("chroma_db"):
+def get_collection():
+    client = chromadb.PersistentClient(path="./chroma_db")
+    collection = client.get_or_create_collection(name="cloudfront_docs")
+    return collection
+
+collection = get_collection()
+
+if collection.count() == 0:
     st.info("🔄 First time setup — building knowledge base. This may take a few minutes...")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
