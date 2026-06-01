@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from pypdf import PdfReader
-from sentence_transformers import SentenceTransformer
 import chromadb
 
 # Load environment variables
@@ -32,19 +31,14 @@ def chunk_text(text, chunk_size=500, overlap=50):
 
 # Step 3 & 4: EMBED and STORE into ChromaDB
 def embed_and_store(chunks):
-    print("Loading embedding model...")
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-
     print("Connecting to ChromaDB...")
     client = chromadb.PersistentClient(path="./chroma_db")
     collection = client.get_or_create_collection(name="cloudfront_docs")
 
-    print("Embedding and storing chunks...")
+    print("Storing chunks...")
     for i, chunk in enumerate(chunks):
-        embedding = model.encode(chunk).tolist()
         collection.add(
             documents=[chunk],
-            embeddings=[embedding],
             ids=[f"chunk_{i}"]
         )
         if i % 100 == 0:
