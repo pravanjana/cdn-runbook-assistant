@@ -26,10 +26,10 @@ def chunk_text(text, chunk_size=500, overlap=50):
     print(f"Total chunks created: {len(chunks)}")
     return chunks
 
-def embed_and_store(chunks, doc_prefix):
-    print("Connecting to ChromaDB...")
-    client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_or_create_collection(name="cloudfront_docs")
+def embed_and_store(chunks, doc_prefix, collection=None):
+    if collection is None:
+        client = chromadb.PersistentClient(path="./chroma_db")
+        collection = client.get_or_create_collection(name="cloudfront_docs")
     print("Storing chunks...")
     for i, chunk in enumerate(chunks):
         collection.add(
@@ -41,6 +41,8 @@ def embed_and_store(chunks, doc_prefix):
     print(f"Done! Total chunks stored: {len(chunks)}")
 
 if __name__ == "__main__":
+    client = chromadb.PersistentClient(path="./chroma_db")
+    collection = client.get_or_create_collection(name="cloudfront_docs")
     pdf_files = [
         ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
         ("docs/waf-dg.pdf", "waf")
@@ -49,5 +51,5 @@ if __name__ == "__main__":
         print(f"\nProcessing: {pdf_path}")
         text = read_pdf(pdf_path)
         chunks = chunk_text(text)
-        embed_and_store(chunks, prefix)
+        embed_and_store(chunks, prefix, collection)
     print("\nAll documents ingested! Knowledge base is ready.")
