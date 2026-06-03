@@ -5,12 +5,8 @@ import chromadb
 
 load_dotenv()
 
-def get_collection():
-    client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_or_create_collection(name="cloudfront_docs")
-    return collection
-
-collection = get_collection()
+chroma_client = chromadb.PersistentClient(path="./chroma_db")
+collection = chroma_client.get_or_create_collection(name="cloudfront_docs")
 
 st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
 
@@ -23,9 +19,8 @@ needs_rebuild = (
 
 if needs_rebuild:
     st.info("🔄 Building knowledge base. This may take a few minutes...")
-    client = chromadb.PersistentClient(path="./chroma_db")
-    client.delete_collection(name="cloudfront_docs")
-    collection = client.get_or_create_collection(name="cloudfront_docs")
+    chroma_client.delete_collection(name="cloudfront_docs")
+    collection = chroma_client.get_or_create_collection(name="cloudfront_docs")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
         ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
