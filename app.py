@@ -10,8 +10,6 @@ load_dotenv()
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(name="cloudfront_docs")
 
-st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
-
 if collection.count() < 10000:
     st.info("🔄 Building knowledge base. This may take a few minutes...")
     result = subprocess.run(
