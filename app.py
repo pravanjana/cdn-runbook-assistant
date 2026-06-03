@@ -20,7 +20,7 @@ needs_rebuild = (
 if needs_rebuild:
     st.info("🔄 Building knowledge base. This may take a few minutes...")
     chroma_client.delete_collection(name="cloudfront_docs")
-    collection = chroma_client.get_or_create_collection(name="cloudfront_docs")
+    collection = chroma_client.create_collection(name="cloudfront_docs")
     from ingest import read_pdf, chunk_text, embed_and_store
     pdf_files = [
         ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
@@ -30,7 +30,7 @@ if needs_rebuild:
         st.info(f"📄 Processing {pdf_path}...")
         text = read_pdf(pdf_path)
         chunks = chunk_text(text)
-        embed_and_store(chunks, prefix)
+        embed_and_store(chunks, prefix, collection)
     st.success("✅ Knowledge base ready!")
     st.rerun()
 
