@@ -1,4 +1,5 @@
 import os
+import subprocess
 import streamlit as st
 from dotenv import load_dotenv
 import chromadb
@@ -10,29 +11,18 @@ collection = chroma_client.get_or_create_collection(name="cloudfront_docs")
 
 st.sidebar.write(f"📊 Knowledge base chunks: {collection.count()}")
 
-existing = collection.get(limit=1)
-needs_rebuild = (
-    len(existing['ids']) == 0 or
-    not existing['ids'][0].startswith(('cloudfront_', 'waf_')) or
-    collection.count() < 10000
-)
-
-if needs_rebuild:
+if collection.count() < 10000:
     st.info("🔄 Building knowledge base. This may take a few minutes...")
-    chroma_client.delete_collection(name="cloudfront_docs")
-    collection = chroma_client.create_collection(name="cloudfront_docs")
-    from ingest import read_pdf, chunk_text, embed_and_store
-    pdf_files = [
-        ("docs/AmazonCloudFront_DevGuide.pdf", "cloudfront"),
-        ("docs/waf-dg.pdf", "waf")
-    ]
-    for pdf_path, prefix in pdf_files:
-        st.info(f"📄 Processing {pdf_path}...")
-        text = read_pdf(pdf_path)
-        chunks = chunk_text(text)
-        embed_and_store(chunks, prefix, collection)
-    st.success("✅ Knowledge base ready!")
-    st.rerun()
+    result = subprocess.run(
+        ["python3", "ingest.py"],
+        capture_output=True,
+        text=True
+    )
+    if result.returncode == 0:
+        st.success("✅ Knowledge base ready!")
+        st.rerun()
+    else:
+        st.error(f"Ingestion failed: {result.stderr}")
 
 from rag import ask
 
