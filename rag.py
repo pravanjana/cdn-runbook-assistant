@@ -21,7 +21,7 @@ def retrieve_chunks(query, top_k=5):
 def generate_answer(query, chunks):
     print("Generating answer with Claude...")
     context = "\n\n".join(chunks)
-    prompt = f"""You are a helpful AWS CloudFront expert assistant.
+    prompt = f"""You are a helpful AWS expert assistant specializing in CloudFront and WAF.
 Use the following documentation excerpts to answer the question.
 If the answer is not in the provided context, say "I don't have enough information to answer that."
 
@@ -31,7 +31,6 @@ Context:
 Question: {query}
 
 Answer:"""
-
     response = claude_client.messages.create(
         model="claude-sonnet-4-5",
         max_tokens=1024,
