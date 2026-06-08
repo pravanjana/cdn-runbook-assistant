@@ -35,14 +35,28 @@ st.title("🚀 CDN Runbook Assistant")
 st.caption("Powered by Claude + ChromaDB | Ask me anything about AWS CloudFront & WAF!")
 st.divider()
 
+# Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
+if "question_count" not in st.session_state:
+    st.session_state.question_count = 0
 
+# Display chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+# Show remaining questions
+remaining = 10 - st.session_state.question_count
+if remaining > 0:
+    st.caption(f"💬 {remaining} questions remaining in this session")
+else:
+    st.warning("⚠️ Session limit of 10 questions reached. Please refresh to start a new session.")
+    st.stop()
+
+# Chat input
 if prompt := st.chat_input("Ask a question about CloudFront or WAF..."):
+    st.session_state.question_count += 1
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
